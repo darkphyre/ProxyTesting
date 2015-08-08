@@ -1,0 +1,6 @@
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\bin\Debug\ProxyTesting.exe.config
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\bin\Debug\ProxyTesting.exe
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\bin\Debug\ProxyTesting.pdb
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\obj\Debug\ProxyTesting.csprojResolveAssemblyReference.cache
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\obj\Debug\ProxyTesting.exe
+C:\Users\phyrephyre\Documents\Judgments\Applications\ProxyTesting\ProxyTesting\obj\Debug\ProxyTesting.pdb
