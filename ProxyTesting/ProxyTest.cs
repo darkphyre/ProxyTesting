@@ -92,5 +92,17 @@ namespace ProxyTesting
 
 
         }
+
+        public static void ReadTextFileCreateNewRecords(string textFile)
+        {
+            string[] fileLines = System.IO.File.ReadAllLines(textFile);
+            for (int i = 0; i < fileLines.Length; i++)
+            {
+                string IP = fileLines[i].Split(':')[0];
+                int port = Convert.ToInt32(fileLines[i].Split(':')[1]);
+                ProxyWorld.sqlProcedures.SQLCommands.StoredProcedure.sp_InsetNewProxyFromFile(IP, port);
+            }
+        }
+
     }
 }

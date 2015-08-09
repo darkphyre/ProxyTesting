@@ -51,35 +51,38 @@ namespace ProxyWorld
         {
             public static void InsertResult(string IP, int Port, DateTime TestDate, string TestBy, TimeSpan PingTimeResults, int PingTestGrade)
             {
-                SqlCommand _sqlCommand = new SqlCommand("sp_insertProxyResult", sqlmasterConnection());
-                _sqlCommand.CommandType = CommandType.StoredProcedure;
-                string[] variables = { "IP", "Port", "TestDate", "TestBy", "PingTimeResults", "PingTestGrade" };
-                for (int i = 0; i < variables.Length; i++)
+                using (SqlConnection sqlCon = sqlmasterConnection())
                 {
-                    switch (variables[i])
+                    SqlCommand _sqlCommand = new SqlCommand("sp_insertProxyResult", sqlCon);
+                    _sqlCommand.CommandType = CommandType.StoredProcedure;
+                    string[] variables = { "IP", "Port", "TestDate", "TestBy", "PingTimeResults", "PingTestGrade" };
+                    for (int i = 0; i < variables.Length; i++)
                     {
-                        case "IP":
-                            _sqlCommand.Parameters.Add("IP", IP);
-                            break;
-                        case "Port":
-                            _sqlCommand.Parameters.AddWithValue("Port", Port);
-                            break;
-                        case "TestDate":
-                            _sqlCommand.Parameters.AddWithValue("TestDate", TestDate);
-                            break;
-                        case "TestBy":
-                            _sqlCommand.Parameters.AddWithValue("TestBy", TestBy);
-                            break;
-                        case "PingTimeResults":
-                            _sqlCommand.Parameters.AddWithValue("PingTimeResults", PingTimeResults);
-                            break;
-                        case "PingTestGrade":
-                            _sqlCommand.Parameters.AddWithValue("PingTestGrade", PingTestGrade);
-                            break;
+                        switch (variables[i])
+                        {
+                            case "IP":
+                                _sqlCommand.Parameters.AddWithValue("IP", IP);
+                                break;
+                            case "Port":
+                                _sqlCommand.Parameters.AddWithValue("Port", Port);
+                                break;
+                            case "TestDate":
+                                _sqlCommand.Parameters.AddWithValue("TestDate", TestDate);
+                                break;
+                            case "TestBy":
+                                _sqlCommand.Parameters.AddWithValue("TestBy", TestBy);
+                                break;
+                            case "PingTimeResults":
+                                _sqlCommand.Parameters.AddWithValue("PingTimeResults", PingTimeResults);
+                                break;
+                            case "PingTestGrade":
+                                _sqlCommand.Parameters.AddWithValue("PingTestGrade", PingTestGrade);
+                                break;
 
+                        }
                     }
+                    _sqlCommand.ExecuteNonQuery();
                 }
-                _sqlCommand.ExecuteNonQuery();
 
             }
 
@@ -90,18 +93,49 @@ namespace ProxyWorld
         {
             public class StoredProcedure
             {
-                private static SqlCommand _sqlCmd(CommandType cmdType, string CommandText)
+                private static SqlCommand _sqlCmd(CommandType cmdType, string CommandText, SqlConnection sqlCon)
                 {
-                    SqlCommand sqlcmd = new SqlCommand(CommandText, sqlmasterConnection());
+                    SqlCommand sqlcmd = new SqlCommand();
+                    sqlcmd.CommandText = CommandText;
+                    if (sqlCon != null)
+                        sqlcmd.Connection = sqlCon;
                     sqlcmd.CommandType = cmdType;
                     return sqlcmd;
 
                 }
                 public static void sp_DeleteFailedProxyTests()
                 {
+                    using (SqlConnection sqlCon = sqlmasterConnection())
+                    {
+                        SqlCommand myCmd = _sqlCmd(CommandType.StoredProcedure, "sp_DeleteFailedProxyTests", sqlCon);
+                        myCmd.ExecuteNonQuery();
+                    }
+                }
 
-                    SqlCommand myCmd = _sqlCmd(CommandType.StoredProcedure, "sp_DeleteFailedProxyTests");
-                    myCmd.ExecuteNonQuery();
+                public static void sp_InsetNewProxyFromFile(string IP, int port)
+                {
+                    using (SqlConnection sqlCon = sqlmasterConnection())
+                    {
+                        SqlCommand sqlCmd = _sqlCmd(CommandType.StoredProcedure, "sp_InsetNewProxyFromFile", sqlCon);
+                        string[] sqlparams = { "IP", "Port" };
+                        for (int i = 0; i < sqlparams.Length; i++)
+                        {
+                            switch (sqlparams[i])
+                            {
+                                case "IP":
+                                    sqlCmd.Parameters.AddWithValue(sqlparams[i], IP);
+                                    break;
+                                case "Port":
+                                    sqlCmd.Parameters.AddWithValue(sqlparams[i], port);
+                                    break;
+
+
+                            }
+                        }
+                        sqlCmd.ExecuteNonQuery();
+                    }
+
+
                 }
 
             }

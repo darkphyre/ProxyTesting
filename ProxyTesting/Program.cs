@@ -13,6 +13,10 @@ namespace ProxyTesting
         static void Main(string[] args)
         {
 
+            string file = @"C:\proxylist.txt";
+            //read from files if needes
+            if(System.IO.File.Exists(file))
+                ProxyTest.ReadTextFileCreateNewRecords(@"C:\proxylist.txt");
             //start statistics
             Statistics("START");
 
